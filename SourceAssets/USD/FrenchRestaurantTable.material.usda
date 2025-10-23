@@ -1,0 +1,1193 @@
+#usda 1.0
+(
+    "Exported from Adobe Substance 3D Painter 11.0.2"
+    defaultPrim = "RootNode"
+)
+
+def "RootNode"
+{
+    def Scope "material"
+    {
+        def Material "Bread" (
+            customData = {
+                dictionary adobe = {
+                    dictionary painter = {
+                        asset painterProject_spp = @I:/Adobe/Adobe Substance 3D Painter/resources/samples/FrenchRestaurantTable.spp@
+                    }
+                }
+            }
+        )
+        {
+            asset inputs:basecolor_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Bread_BaseColor.1001.png@
+            asset inputs:compositedAmbientOcclusion_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Bread_OcclusionRoughnessMetallic.1001.png@
+            asset inputs:compositedNormalDX_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Bread_Normal.1001.png@
+            asset inputs:height_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Bread_Height.1001.png@
+            asset inputs:metallic_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Bread_OcclusionRoughnessMetallic.1001.png@
+            asset inputs:opacity_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Bread_BaseColor.1001.png@
+            asset inputs:roughness_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Bread_OcclusionRoughnessMetallic.1001.png@
+            token outputs:adobe:surface.connect = </RootNode/material/Bread/AdobeStandardMaterial_4_0/AdobeStandardMaterial_4_0Shader.outputs:surface>
+            token outputs:displacement.connect = </RootNode/material/Bread/UsdPreviewSurface/UsdPreviewSurfaceShader.outputs:displacement>
+            token outputs:surface.connect = </RootNode/material/Bread/UsdPreviewSurface/UsdPreviewSurfaceShader.outputs:surface>
+
+            def NodeGraph "UsdPreviewSurface"
+            {
+                def Shader "UsdPreviewSurfaceShader"
+                {
+                    uniform token info:id = "UsdPreviewSurface"
+                    float3 inputs:diffuseColor.connect = </RootNode/material/Bread/UsdPreviewSurface/diffuseColorTextureShader.outputs:rgb>
+                    float inputs:ior = 1.5
+                    float inputs:metallic.connect = </RootNode/material/Bread/UsdPreviewSurface/metallicTextureShader.outputs:b>
+                    normal3f inputs:normal.connect = </RootNode/material/Bread/UsdPreviewSurface/normalTextureShader.outputs:rgb>
+                    float inputs:occlusion.connect = </RootNode/material/Bread/UsdPreviewSurface/occlusionTextureShader.outputs:r>
+                    float inputs:roughness.connect = </RootNode/material/Bread/UsdPreviewSurface/roughnessTextureShader.outputs:g>
+                    token outputs:displacement
+                    token outputs:surface
+                }
+
+                def Shader "TexCoordReader"
+                {
+                    uniform token info:id = "UsdPrimvarReader_float2"
+                    token inputs:varname = "st"
+                    float2 outputs:result
+                }
+
+                def Shader "diffuseColorTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Bread.inputs:basecolor_tex>
+                    token inputs:sourceColorSpace = "sRGB"
+                    float2 inputs:st.connect = </RootNode/material/Bread/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float3 outputs:rgb
+                }
+
+                def Shader "roughnessTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Bread.inputs:roughness_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Bread/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:g
+                }
+
+                def Shader "metallicTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Bread.inputs:metallic_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Bread/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:b
+                }
+
+                def Shader "occlusionTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Bread.inputs:compositedAmbientOcclusion_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Bread/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:r
+                }
+
+                def Shader "normalTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    float4 inputs:bias = (-1, 1, -1, 0)
+                    asset inputs:file.connect = </RootNode/material/Bread.inputs:compositedNormalDX_tex>
+                    float4 inputs:scale = (2, -2, 2, 1)
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Bread/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    normal3f outputs:rgb
+                }
+            }
+
+            def NodeGraph "AdobeStandardMaterial_4_0"
+            {
+                def Shader "AdobeStandardMaterial_4_0Shader"
+                {
+                    uniform token info:id = "AdobeStandardMaterial_4_0"
+                    float inputs:ambientOcclusion.connect = </RootNode/material/Bread/AdobeStandardMaterial_4_0/ambientOcclusionTextureShader.outputs:r>
+                    float3 inputs:baseColor.connect = </RootNode/material/Bread/AdobeStandardMaterial_4_0/baseColorTextureShader.outputs:rgb>
+                    float inputs:IOR = 1.5
+                    float inputs:metallic.connect = </RootNode/material/Bread/AdobeStandardMaterial_4_0/metallicTextureShader.outputs:b>
+                    normal3f inputs:normal.connect = </RootNode/material/Bread/AdobeStandardMaterial_4_0/normalTextureShader.outputs:rgb>
+                    float inputs:roughness.connect = </RootNode/material/Bread/AdobeStandardMaterial_4_0/roughnessTextureShader.outputs:g>
+                    token outputs:surface
+                }
+
+                def Shader "TexCoordReader"
+                {
+                    uniform token info:id = "UsdPrimvarReader_float2"
+                    token inputs:varname = "st"
+                    float2 outputs:result
+                }
+
+                def Shader "baseColorTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Bread.inputs:basecolor_tex>
+                    token inputs:sourceColorSpace = "sRGB"
+                    float2 inputs:st.connect = </RootNode/material/Bread/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float3 outputs:rgb
+                }
+
+                def Shader "roughnessTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Bread.inputs:roughness_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Bread/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:g
+                }
+
+                def Shader "metallicTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Bread.inputs:metallic_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Bread/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:b
+                }
+
+                def Shader "normalTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    float4 inputs:bias = (-1, 1, -1, 0)
+                    asset inputs:file.connect = </RootNode/material/Bread.inputs:compositedNormalDX_tex>
+                    float4 inputs:scale = (2, -2, 2, 1)
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Bread/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    normal3f outputs:rgb
+                }
+
+                def Shader "ambientOcclusionTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Bread.inputs:compositedAmbientOcclusion_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Bread/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:r
+                }
+            }
+        }
+
+        def Material "Table" (
+            customData = {
+                dictionary adobe = {
+                    dictionary painter = {
+                        asset painterProject_spp = @I:/Adobe/Adobe Substance 3D Painter/resources/samples/FrenchRestaurantTable.spp@
+                    }
+                }
+            }
+        )
+        {
+            asset inputs:basecolor_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Table_BaseColor.<UDIM>.png@
+            asset inputs:compositedAmbientOcclusion_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Table_OcclusionRoughnessMetallic.<UDIM>.png@
+            asset inputs:compositedNormalDX_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Table_Normal.<UDIM>.png@
+            asset inputs:height_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Table_Height.<UDIM>.png@
+            asset inputs:metallic_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Table_OcclusionRoughnessMetallic.<UDIM>.png@
+            asset inputs:opacity_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Table_BaseColor.<UDIM>.png@
+            asset inputs:roughness_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Table_OcclusionRoughnessMetallic.<UDIM>.png@
+            token outputs:adobe:surface.connect = </RootNode/material/Table/AdobeStandardMaterial_4_0/AdobeStandardMaterial_4_0Shader.outputs:surface>
+            token outputs:displacement.connect = </RootNode/material/Table/UsdPreviewSurface/UsdPreviewSurfaceShader.outputs:displacement>
+            token outputs:surface.connect = </RootNode/material/Table/UsdPreviewSurface/UsdPreviewSurfaceShader.outputs:surface>
+
+            def NodeGraph "UsdPreviewSurface"
+            {
+                def Shader "UsdPreviewSurfaceShader"
+                {
+                    uniform token info:id = "UsdPreviewSurface"
+                    float3 inputs:diffuseColor.connect = </RootNode/material/Table/UsdPreviewSurface/diffuseColorTextureShader.outputs:rgb>
+                    float inputs:ior = 1.5
+                    float inputs:metallic.connect = </RootNode/material/Table/UsdPreviewSurface/metallicTextureShader.outputs:b>
+                    normal3f inputs:normal.connect = </RootNode/material/Table/UsdPreviewSurface/normalTextureShader.outputs:rgb>
+                    float inputs:occlusion.connect = </RootNode/material/Table/UsdPreviewSurface/occlusionTextureShader.outputs:r>
+                    float inputs:opacity.connect = </RootNode/material/Table/UsdPreviewSurface/opacityTextureShader.outputs:a>
+                    float inputs:opacityThreshold = 0.33
+                    float inputs:roughness.connect = </RootNode/material/Table/UsdPreviewSurface/roughnessTextureShader.outputs:g>
+                    token outputs:displacement
+                    token outputs:surface
+                }
+
+                def Shader "TexCoordReader"
+                {
+                    uniform token info:id = "UsdPrimvarReader_float2"
+                    token inputs:varname = "st"
+                    float2 outputs:result
+                }
+
+                def Shader "diffuseColorTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Table.inputs:basecolor_tex>
+                    token inputs:sourceColorSpace = "sRGB"
+                    float2 inputs:st.connect = </RootNode/material/Table/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float3 outputs:rgb
+                }
+
+                def Shader "roughnessTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Table.inputs:roughness_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Table/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:g
+                }
+
+                def Shader "metallicTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Table.inputs:metallic_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Table/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:b
+                }
+
+                def Shader "opacityTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Table.inputs:opacity_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Table/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:a
+                }
+
+                def Shader "occlusionTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Table.inputs:compositedAmbientOcclusion_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Table/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:r
+                }
+
+                def Shader "normalTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    float4 inputs:bias = (-1, 1, -1, 0)
+                    asset inputs:file.connect = </RootNode/material/Table.inputs:compositedNormalDX_tex>
+                    float4 inputs:scale = (2, -2, 2, 1)
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Table/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    normal3f outputs:rgb
+                }
+            }
+
+            def NodeGraph "AdobeStandardMaterial_4_0"
+            {
+                def Shader "AdobeStandardMaterial_4_0Shader"
+                {
+                    uniform token info:id = "AdobeStandardMaterial_4_0"
+                    float inputs:ambientOcclusion.connect = </RootNode/material/Table/AdobeStandardMaterial_4_0/ambientOcclusionTextureShader.outputs:r>
+                    float3 inputs:baseColor.connect = </RootNode/material/Table/AdobeStandardMaterial_4_0/baseColorTextureShader.outputs:rgb>
+                    float inputs:IOR = 1.5
+                    float inputs:metallic.connect = </RootNode/material/Table/AdobeStandardMaterial_4_0/metallicTextureShader.outputs:b>
+                    normal3f inputs:normal.connect = </RootNode/material/Table/AdobeStandardMaterial_4_0/normalTextureShader.outputs:rgb>
+                    float inputs:opacity.connect = </RootNode/material/Table/AdobeStandardMaterial_4_0/opacityTextureShader.outputs:a>
+                    float inputs:roughness.connect = </RootNode/material/Table/AdobeStandardMaterial_4_0/roughnessTextureShader.outputs:g>
+                    token outputs:surface
+                }
+
+                def Shader "TexCoordReader"
+                {
+                    uniform token info:id = "UsdPrimvarReader_float2"
+                    token inputs:varname = "st"
+                    float2 outputs:result
+                }
+
+                def Shader "baseColorTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Table.inputs:basecolor_tex>
+                    token inputs:sourceColorSpace = "sRGB"
+                    float2 inputs:st.connect = </RootNode/material/Table/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float3 outputs:rgb
+                }
+
+                def Shader "roughnessTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Table.inputs:roughness_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Table/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:g
+                }
+
+                def Shader "metallicTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Table.inputs:metallic_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Table/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:b
+                }
+
+                def Shader "opacityTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Table.inputs:opacity_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Table/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:a
+                }
+
+                def Shader "normalTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    float4 inputs:bias = (-1, 1, -1, 0)
+                    asset inputs:file.connect = </RootNode/material/Table.inputs:compositedNormalDX_tex>
+                    float4 inputs:scale = (2, -2, 2, 1)
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Table/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    normal3f outputs:rgb
+                }
+
+                def Shader "ambientOcclusionTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Table.inputs:compositedAmbientOcclusion_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Table/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:r
+                }
+            }
+        }
+
+        def Material "Tableware" (
+            customData = {
+                dictionary adobe = {
+                    dictionary painter = {
+                        asset painterProject_spp = @I:/Adobe/Adobe Substance 3D Painter/resources/samples/FrenchRestaurantTable.spp@
+                    }
+                }
+            }
+        )
+        {
+            asset inputs:basecolor_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Tableware_BaseColor.1001.png@
+            asset inputs:compositedAmbientOcclusion_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Tableware_OcclusionRoughnessMetallic.1001.png@
+            asset inputs:compositedNormalDX_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Tableware_Normal.1001.png@
+            asset inputs:height_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Tableware_Height.1001.png@
+            asset inputs:metallic_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Tableware_OcclusionRoughnessMetallic.1001.png@
+            asset inputs:opacity_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Tableware_BaseColor.1001.png@
+            asset inputs:roughness_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_Tableware_OcclusionRoughnessMetallic.1001.png@
+            token outputs:adobe:surface.connect = </RootNode/material/Tableware/AdobeStandardMaterial_4_0/AdobeStandardMaterial_4_0Shader.outputs:surface>
+            token outputs:displacement.connect = </RootNode/material/Tableware/UsdPreviewSurface/UsdPreviewSurfaceShader.outputs:displacement>
+            token outputs:surface.connect = </RootNode/material/Tableware/UsdPreviewSurface/UsdPreviewSurfaceShader.outputs:surface>
+
+            def NodeGraph "UsdPreviewSurface"
+            {
+                def Shader "UsdPreviewSurfaceShader"
+                {
+                    uniform token info:id = "UsdPreviewSurface"
+                    float3 inputs:diffuseColor.connect = </RootNode/material/Tableware/UsdPreviewSurface/diffuseColorTextureShader.outputs:rgb>
+                    float inputs:ior = 1.5
+                    float inputs:metallic.connect = </RootNode/material/Tableware/UsdPreviewSurface/metallicTextureShader.outputs:b>
+                    normal3f inputs:normal.connect = </RootNode/material/Tableware/UsdPreviewSurface/normalTextureShader.outputs:rgb>
+                    float inputs:occlusion.connect = </RootNode/material/Tableware/UsdPreviewSurface/occlusionTextureShader.outputs:r>
+                    float inputs:roughness.connect = </RootNode/material/Tableware/UsdPreviewSurface/roughnessTextureShader.outputs:g>
+                    token outputs:displacement
+                    token outputs:surface
+                }
+
+                def Shader "TexCoordReader"
+                {
+                    uniform token info:id = "UsdPrimvarReader_float2"
+                    token inputs:varname = "st"
+                    float2 outputs:result
+                }
+
+                def Shader "diffuseColorTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Tableware.inputs:basecolor_tex>
+                    token inputs:sourceColorSpace = "sRGB"
+                    float2 inputs:st.connect = </RootNode/material/Tableware/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float3 outputs:rgb
+                }
+
+                def Shader "roughnessTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Tableware.inputs:roughness_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Tableware/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:g
+                }
+
+                def Shader "metallicTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Tableware.inputs:metallic_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Tableware/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:b
+                }
+
+                def Shader "occlusionTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Tableware.inputs:compositedAmbientOcclusion_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Tableware/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:r
+                }
+
+                def Shader "normalTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    float4 inputs:bias = (-1, 1, -1, 0)
+                    asset inputs:file.connect = </RootNode/material/Tableware.inputs:compositedNormalDX_tex>
+                    float4 inputs:scale = (2, -2, 2, 1)
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Tableware/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    normal3f outputs:rgb
+                }
+            }
+
+            def NodeGraph "AdobeStandardMaterial_4_0"
+            {
+                def Shader "AdobeStandardMaterial_4_0Shader"
+                {
+                    uniform token info:id = "AdobeStandardMaterial_4_0"
+                    float inputs:ambientOcclusion.connect = </RootNode/material/Tableware/AdobeStandardMaterial_4_0/ambientOcclusionTextureShader.outputs:r>
+                    float3 inputs:baseColor.connect = </RootNode/material/Tableware/AdobeStandardMaterial_4_0/baseColorTextureShader.outputs:rgb>
+                    float inputs:coatIOR = 1.6
+                    float inputs:IOR = 1.5
+                    float inputs:metallic.connect = </RootNode/material/Tableware/AdobeStandardMaterial_4_0/metallicTextureShader.outputs:b>
+                    normal3f inputs:normal.connect = </RootNode/material/Tableware/AdobeStandardMaterial_4_0/normalTextureShader.outputs:rgb>
+                    float inputs:roughness.connect = </RootNode/material/Tableware/AdobeStandardMaterial_4_0/roughnessTextureShader.outputs:g>
+                    token outputs:surface
+                }
+
+                def Shader "TexCoordReader"
+                {
+                    uniform token info:id = "UsdPrimvarReader_float2"
+                    token inputs:varname = "st"
+                    float2 outputs:result
+                }
+
+                def Shader "baseColorTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Tableware.inputs:basecolor_tex>
+                    token inputs:sourceColorSpace = "sRGB"
+                    float2 inputs:st.connect = </RootNode/material/Tableware/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float3 outputs:rgb
+                }
+
+                def Shader "roughnessTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Tableware.inputs:roughness_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Tableware/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:g
+                }
+
+                def Shader "metallicTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Tableware.inputs:metallic_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Tableware/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:b
+                }
+
+                def Shader "normalTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    float4 inputs:bias = (-1, 1, -1, 0)
+                    asset inputs:file.connect = </RootNode/material/Tableware.inputs:compositedNormalDX_tex>
+                    float4 inputs:scale = (2, -2, 2, 1)
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Tableware/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    normal3f outputs:rgb
+                }
+
+                def Shader "ambientOcclusionTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/Tableware.inputs:compositedAmbientOcclusion_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/Tableware/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:r
+                }
+            }
+        }
+
+        def Material "TablewareTransparent" (
+            customData = {
+                dictionary adobe = {
+                    dictionary painter = {
+                        asset painterProject_spp = @I:/Adobe/Adobe Substance 3D Painter/resources/samples/FrenchRestaurantTable.spp@
+                    }
+                }
+            }
+        )
+        {
+            asset inputs:basecolor_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_TablewareTransparent_BaseColor.1001.png@
+            asset inputs:compositedAmbientOcclusion_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_TablewareTransparent_OcclusionRoughnessMetallic.1001.png@
+            asset inputs:compositedNormalDX_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_TablewareTransparent_Normal.1001.png@
+            asset inputs:height_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_TablewareTransparent_Height.1001.png@
+            asset inputs:metallic_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_TablewareTransparent_OcclusionRoughnessMetallic.1001.png@
+            asset inputs:opacity_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_TablewareTransparent_BaseColor.1001.png@
+            asset inputs:roughness_tex = @FrenchRestaurantTable_textures/FrenchTable_UVTiles_TablewareTransparent_OcclusionRoughnessMetallic.1001.png@
+            token outputs:adobe:surface.connect = </RootNode/material/TablewareTransparent/AdobeStandardMaterial_4_0/AdobeStandardMaterial_4_0Shader.outputs:surface>
+            token outputs:displacement.connect = </RootNode/material/TablewareTransparent/UsdPreviewSurface/UsdPreviewSurfaceShader.outputs:displacement>
+            token outputs:surface.connect = </RootNode/material/TablewareTransparent/UsdPreviewSurface/UsdPreviewSurfaceShader.outputs:surface>
+
+            def NodeGraph "UsdPreviewSurface"
+            {
+                def Shader "UsdPreviewSurfaceShader"
+                {
+                    uniform token info:id = "UsdPreviewSurface"
+                    float3 inputs:diffuseColor.connect = </RootNode/material/TablewareTransparent/UsdPreviewSurface/diffuseColorTextureShader.outputs:rgb>
+                    float inputs:ior = 1.4
+                    float inputs:metallic.connect = </RootNode/material/TablewareTransparent/UsdPreviewSurface/metallicTextureShader.outputs:b>
+                    normal3f inputs:normal.connect = </RootNode/material/TablewareTransparent/UsdPreviewSurface/normalTextureShader.outputs:rgb>
+                    float inputs:occlusion.connect = </RootNode/material/TablewareTransparent/UsdPreviewSurface/occlusionTextureShader.outputs:r>
+                    float inputs:roughness.connect = </RootNode/material/TablewareTransparent/UsdPreviewSurface/roughnessTextureShader.outputs:g>
+                    token outputs:displacement
+                    token outputs:surface
+                }
+
+                def Shader "TexCoordReader"
+                {
+                    uniform token info:id = "UsdPrimvarReader_float2"
+                    token inputs:varname = "st"
+                    float2 outputs:result
+                }
+
+                def Shader "diffuseColorTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/TablewareTransparent.inputs:basecolor_tex>
+                    token inputs:sourceColorSpace = "sRGB"
+                    float2 inputs:st.connect = </RootNode/material/TablewareTransparent/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float3 outputs:rgb
+                }
+
+                def Shader "roughnessTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/TablewareTransparent.inputs:roughness_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/TablewareTransparent/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:g
+                }
+
+                def Shader "metallicTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/TablewareTransparent.inputs:metallic_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/TablewareTransparent/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:b
+                }
+
+                def Shader "occlusionTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/TablewareTransparent.inputs:compositedAmbientOcclusion_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/TablewareTransparent/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:r
+                }
+
+                def Shader "normalTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    float4 inputs:bias = (-1, 1, -1, 0)
+                    asset inputs:file.connect = </RootNode/material/TablewareTransparent.inputs:compositedNormalDX_tex>
+                    float4 inputs:scale = (2, -2, 2, 1)
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/TablewareTransparent/UsdPreviewSurface/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    normal3f outputs:rgb
+                }
+            }
+
+            def NodeGraph "AdobeStandardMaterial_4_0"
+            {
+                def Shader "AdobeStandardMaterial_4_0Shader"
+                {
+                    uniform token info:id = "AdobeStandardMaterial_4_0"
+                    float inputs:ambientOcclusion.connect = </RootNode/material/TablewareTransparent/AdobeStandardMaterial_4_0/ambientOcclusionTextureShader.outputs:r>
+                    float3 inputs:baseColor.connect = </RootNode/material/TablewareTransparent/AdobeStandardMaterial_4_0/baseColorTextureShader.outputs:rgb>
+                    float inputs:coatIOR = 1.6
+                    float inputs:IOR = 1.4
+                    float inputs:metallic.connect = </RootNode/material/TablewareTransparent/AdobeStandardMaterial_4_0/metallicTextureShader.outputs:b>
+                    normal3f inputs:normal.connect = </RootNode/material/TablewareTransparent/AdobeStandardMaterial_4_0/normalTextureShader.outputs:rgb>
+                    float inputs:roughness.connect = </RootNode/material/TablewareTransparent/AdobeStandardMaterial_4_0/roughnessTextureShader.outputs:g>
+                    token outputs:surface
+                }
+
+                def Shader "TexCoordReader"
+                {
+                    uniform token info:id = "UsdPrimvarReader_float2"
+                    token inputs:varname = "st"
+                    float2 outputs:result
+                }
+
+                def Shader "baseColorTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/TablewareTransparent.inputs:basecolor_tex>
+                    token inputs:sourceColorSpace = "sRGB"
+                    float2 inputs:st.connect = </RootNode/material/TablewareTransparent/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float3 outputs:rgb
+                }
+
+                def Shader "roughnessTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/TablewareTransparent.inputs:roughness_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/TablewareTransparent/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:g
+                }
+
+                def Shader "metallicTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/TablewareTransparent.inputs:metallic_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/TablewareTransparent/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:b
+                }
+
+                def Shader "normalTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    float4 inputs:bias = (-1, 1, -1, 0)
+                    asset inputs:file.connect = </RootNode/material/TablewareTransparent.inputs:compositedNormalDX_tex>
+                    float4 inputs:scale = (2, -2, 2, 1)
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/TablewareTransparent/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    normal3f outputs:rgb
+                }
+
+                def Shader "ambientOcclusionTextureShader"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file.connect = </RootNode/material/TablewareTransparent.inputs:compositedAmbientOcclusion_tex>
+                    token inputs:sourceColorSpace = "raw"
+                    float2 inputs:st.connect = </RootNode/material/TablewareTransparent/AdobeStandardMaterial_4_0/TexCoordReader.outputs:result>
+                    token inputs:wrapS = "repeat"
+                    token inputs:wrapT = "repeat"
+                    float outputs:r
+                }
+            }
+        }
+    }
+
+    over "Bread"
+    {
+        over "Bread" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Bread>
+        }
+    }
+
+    over "table_feet"
+    {
+        over "table_feet" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Table>
+        }
+    }
+
+    over "table_top"
+    {
+        over "table_top" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Table>
+        }
+    }
+
+    over "napkin_subdi_optim"
+    {
+        over "napkin_subdi_optim" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Table>
+        }
+    }
+
+    over "floor"
+    {
+        over "floor" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Table>
+        }
+    }
+
+    over "flower_1_leaf"
+    {
+        over "flower_1_leaf" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Table>
+        }
+    }
+
+    over "flower_1_stem"
+    {
+        over "flower_1_stem" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Table>
+        }
+    }
+
+    over "flower_2_leaf"
+    {
+        over "flower_2_leaf" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Table>
+        }
+    }
+
+    over "flower_2_stem"
+    {
+        over "flower_2_stem" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Table>
+        }
+    }
+
+    over "fork_1"
+    {
+        over "fork_1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "knife_1"
+    {
+        over "knife_1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "spoon_1"
+    {
+        over "spoon_1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "plate_1"
+    {
+        over "plate_1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "plate_2"
+    {
+        over "plate_2" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "pepper"
+    {
+        over "pepper" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "tableware_napkin_1"
+    {
+        over "tableware_napkin_1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "paper_message"
+    {
+        over "paper_message" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "spoon_2"
+    {
+        over "spoon_2" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "knife_2"
+    {
+        over "knife_2" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "fork_2"
+    {
+        over "fork_2" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "vase"
+    {
+        over "vase" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "bucket_handle"
+    {
+        over "bucket_handle" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "bucket"
+    {
+        over "bucket" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "cutting_board"
+    {
+        over "cutting_board" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "cheese"
+    {
+        over "cheese" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "flag"
+    {
+        over "flag" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "tableware_napkin_2"
+    {
+        over "tableware_napkin_2" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/Tableware>
+        }
+    }
+
+    over "ice_cubes_1"
+    {
+        over "ice_cubes_1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+
+    over "ice_cubes_2"
+    {
+        over "ice_cubes_2" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+
+    over "ice_cubes_3"
+    {
+        over "ice_cubes_3" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+
+    over "ice_cubes_4"
+    {
+        over "ice_cubes_4" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+
+    over "ice_cubes_5"
+    {
+        over "ice_cubes_5" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+
+    over "ice_cubes_6"
+    {
+        over "ice_cubes_6" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+
+    over "ice_cubes_7"
+    {
+        over "ice_cubes_7" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+
+    over "ice_cubes_8"
+    {
+        over "ice_cubes_8" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+
+    over "ice_cubes_9"
+    {
+        over "ice_cubes_9" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+
+    over "wine_bottle"
+    {
+        over "wine_bottle" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+
+    over "wine_glass_1"
+    {
+        over "wine_glass_1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+
+    over "wine_glass_2"
+    {
+        over "wine_glass_2" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+
+    over "champagne_glass_2"
+    {
+        over "champagne_glass_2" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+
+    over "champagne_bottle"
+    {
+        over "champagne_bottle" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+
+    over "cork_stopper"
+    {
+        over "cork_stopper" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+
+    over "champagne_glass_1"
+    {
+        over "champagne_glass_1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </RootNode/material/TablewareTransparent>
+        }
+    }
+}
+
